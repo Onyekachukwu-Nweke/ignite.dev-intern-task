@@ -40,3 +40,10 @@ chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 
 echo "kind has been installed."
+
+# Create a Kind cluster named "ignite-dev"
+kind create cluster --name ignite-dev
+
+# Download kubeconfig for the cluster
+mkdir -p ~/.kube
+kind get kubeconfig --name ignite-dev > ~/.kube/config_kind
