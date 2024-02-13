@@ -15,7 +15,7 @@ spec:
         app: sample-app
     spec:
       containers:
-      - name: sample-app
-        image: your-dockerhub-username/sample-node-app
-        ports:
-          - containerPort: 3000
+        - name: sample-app
+          image: your-dockerhub-username/sample-node-app
+          ports:
+            - containerPort: 3000
