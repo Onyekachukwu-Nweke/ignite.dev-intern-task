@@ -1,5 +1,3 @@
-// main.tf
-
 terraform {
   required_version = ">= 0.13"
 
@@ -11,8 +9,9 @@ terraform {
   }
 }
 
-provider "kubernetes" {
-  config_path = "~/.kube/config_kind"
+provider "kubectl" {
+  load_config_file = true
+  config_path      = "~/.kube/config_kind"
 }
 
 resource "kubectl_manifest" "node_app" {
