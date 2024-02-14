@@ -36,28 +36,3 @@ spec:
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 5
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-world-service
-spec:
-  selector:
-    app: hello-world
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: furex-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    kubernetes.io/ingress.className: "nginx"
-spec:
-  ingressClassName: nginx
