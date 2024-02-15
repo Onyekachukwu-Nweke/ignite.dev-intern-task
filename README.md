@@ -47,3 +47,5 @@ Based on the provided requirements, here are some technical assumptions that I m
 4. Docker may not be installed
 5. There may be more than one cluster being managed
 
+### KinD Setup
+Within the project repo I created a folder called ``scripts`` and then a file named ``setup_kind_cluster.sh``
