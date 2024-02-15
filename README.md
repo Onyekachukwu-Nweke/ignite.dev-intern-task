@@ -19,3 +19,7 @@
 1. Create a repository with all your code in it
 2. Send an email to intern.task@ignite.dev on or before 02/17/2024
    
+## Task Submission By Nweke Onyekachukwu Ejiofor
+This section of the README shows a step-by-step process on how to setup KinD locally using a bash script, dockerize a backend NodeJS application, and also use terraform to deploy the to the cluster and setup monitoring and observability using **kube-prometheus-stack**
+
+### Table of Contents
