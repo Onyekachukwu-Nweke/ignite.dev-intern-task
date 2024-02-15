@@ -11,6 +11,15 @@ prometheusOperator:
 ##
 prometheus:
   enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.allow-http: "true"
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - "hello-world.local"
+    path: /prometheus/
+    pathType: ImplementationSpecific
 
   ## Prometheus StorageSpec for persistent data
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/storage.md
@@ -18,33 +27,8 @@ prometheus:
   prometheusSpec:
     storageSpec:
       emptyDir: {}
-
-  additionalPrometheusRulesMap:
-    - name: pod-memory-utilization
-      groups:
-        - name: PodMemoryUtilization
-          rules:
-            - alert: PodMemoryUtilization
-              expr: (sum(container_memory_usage_bytes{namespace!="", pod=~".*"})) / sum(container_spec_memory_limit_bytes{namespace!="", pod=~".*"}) * 100 > 70
-              for: 5m
-              labels:
-                severity: critical
-              annotations:
-                summary: "Pod memory utilization is over 70%"
-                description: "The memory utilization of a pod is over 70%. Pod: {{ $labels.pod }}, Namespace: {{ $labels.namespace }}"
-
-    - name: pod-cpu-utilization
-      groups:
-        - name: PodCPUUtilization
-          rules:
-            - alert: PodCPUUtilization
-              expr: (sum(rate(container_cpu_usage_seconds_total{namespace!="", pod=~".*"}[5m]))) / count(count(node_cpu_seconds_total{mode="system"}) by (instance)) * 100 > 70
-              for: 5m
-              labels:
-                severity: critical
-              annotations:
-                summary: "Pod CPU utilization is over 70%"
-                description: "The CPU utilization of a pod is over 70%. Pod: {{ $labels.pod }}, Namespace: {{ $labels.namespace }}"
+    retention: 90d
+    replicas: 2
 
 ## Configuration for Grafana
 ## ref: https://grafana.com/
@@ -54,8 +38,26 @@ prometheus:
 grafana:
   enabled: true
   adminPassword: prom-operator # Please change the default password in production !!!
+  ingress:
+    ## If true, Grafana Ingress will be created
+    ##
+    enabled: true
+    ## Annotations for Grafana Ingress
+    ##
+    annotations:
+      kubernetes.io/ingress.allow-http: "true"
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - "${var.domain}"
+    path: /grafana/
+    pathType: ImplementationSpecific
   persistence:
     enabled: false
+  grafana.ini:
+    server:
+      domain: "hello-world.local"
+      root_url: "http://hello-world.local/grafana/"
+      serve_from_sub_path: true
 
 ## Configuration for Alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
@@ -64,25 +66,33 @@ grafana:
 ##
 alertmanager:
   enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.allow-http: "true"
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - "${var.domain}"
+    path: /alertmanager/
+    pathType: ImplementationSpecific
 
   # Configure email alerts
-  config: |-
+  config:
     global:
-      smtp_smarthost: 'sandbox.smtp.mailtrap.io:2525'
-      smtp_from: 'alertmanager@example.com'
-      smtp_auth_username: 'd06592af1f74b7'
-      smtp_auth_password: '24a46ab73bc13a'
-
+      resolve_timeout: 5m
     route:
       group_by: ['alertname']
       receiver: 'email'
       repeat_interval: 1h
       group_wait: 30s
-
     receivers:
     - name: 'email'
       email_configs:
       - to: 'onyekachukwu@example.com'
+        from: 'alertmanager@example.com'
+        smarthost: 'sandbox.smtp.mailtrap.io:2525'
+        auth_username: 'd06592af1f74b7'
+        auth_password: '24a46ab73bc13a'
 
   ## Additional alerting rules
   ##
@@ -102,23 +112,40 @@ alertmanager:
           alertname: PodCPUUtilization
         receiver: 'email'
 
-## Create default rules for monitoring the cluster
-##
-##
-defaultRules:
-  create: true
-  rules:
-    etcd: false
-    kubeScheduler: false
-
-## Component scraping kube scheduler
-##
-##
-kubeScheduler:
-  enabled: false
-
-## Component scraping etcd
-##
-##
-kubeEtcd:
-  enabled: false
+additionalPrometheusRulesMap:
+  - name: pod-cpu-utilization
+    groups:
+      - name: PodCPUUtilization
+        rules:
+          - alert: PodCPUUtilization
+            expr: (sum(rate(container_cpu_usage_seconds_total{namespace!="", pod=~".*"}[5m]))) / count(count(node_cpu_seconds_total{mode="system"}) by (instance)) * 100 > 70
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod CPU utilization is over 70%"
+              description: "The CPU utilization of a pod is over 70%. Pod: {{ $labels.pod }}, Namespace: {{ $labels.namespace }}"
+  - name: pod-crashloopbackoff
+    groups:
+      - name: PodCrashLoopBackOff
+        rules:
+          - alert: PodCrashLoopBackOff
+            expr: kube_pod_status_condition{condition="Ready",status="false"} == 1
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Pod is in CrashLoopBackOff state"
+              description: "The pod is in CrashLoopBackOff state. Pod: {{ $labels.pod }}, Namespace: {{ $labels.namespace }}"
+  - name: pod-instance-down
+    groups:
+      - name: PodInstanceDown
+        rules:
+          - alert: PodInstanceDown
+            expr: absent(up{job="kubelet"} == 1)
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod instance is down"
+              description: "The pod instance is down. Pod: {{ $labels.pod }}, Namespace: {{ $labels.namespace }}"
