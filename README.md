@@ -26,9 +26,9 @@ This section of the README shows a step-by-step process on how to setup KinD loc
 - [Prerequisite](#prequisite)
 - [Assumptions](#assumptions)
 - [KinD Setup]()
-- [Terraform Setup]
-- [Terraform Configurations]
-- [Deploying Infrastructure]
+- [Terraform Setup]()
+- [Terraform Configurations]()
+- [Deploying Infrastructure]()
 - [Cleanup]
 - [License]
 
@@ -37,7 +37,6 @@ Before I began the Project, I had the following:
 
 - A knowledge of Terraform and the modules used in the project
 - Working knowledge of KinD (Kubernetes in Docker)
-- 
 
 ### Assumptions
 Based on the provided requirements, here are some technical assumptions that I made for the project:
