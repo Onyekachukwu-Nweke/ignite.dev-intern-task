@@ -67,7 +67,7 @@ mkdir -p ~/.kube
 kind get kubeconfig --name ignite-dev > ~/.kube/config_kind
 
 # Switch Kind context
-kubectl cluster-info --context ignite-dev
+kubectl cluster-info --context kind-ignite-dev
 
 # Install NGINX ingress in KIND ignite-dev cluster
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
