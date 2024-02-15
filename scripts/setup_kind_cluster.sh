@@ -60,6 +60,8 @@ nodes:
   - containerPort: 443
     hostPort: 443
     protocol: TCP
+- role: worker
+- role: worker
 EOF
 
 # Download kubeconfig for the cluster

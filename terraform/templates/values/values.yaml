@@ -14,12 +14,15 @@ prometheus:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.allow-http: "true"
+      # kubernetes.io/ingress.allow-http: "true"
       kubernetes.io/ingress.class: nginx
     hosts:
       - "hello-world.local"
-    path: /prometheus/
+    path: /prometheus(/|$)(.*)
     pathType: ImplementationSpecific
+    # service:
+    #     port: 80
+    #     targetPort: 9090
 
   ## Prometheus StorageSpec for persistent data
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/storage.md
@@ -48,8 +51,8 @@ grafana:
       kubernetes.io/ingress.allow-http: "true"
       kubernetes.io/ingress.class: nginx
     hosts:
-      - "${var.domain}"
-    path: /grafana/
+      - "hello-world.local"
+    path: /grafana(/|$)(.*)
     pathType: ImplementationSpecific
   persistence:
     enabled: false
@@ -66,15 +69,15 @@ grafana:
 ##
 alertmanager:
   enabled: true
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.allow-http: "true"
-      kubernetes.io/ingress.class: nginx
-    hosts:
-      - "${var.domain}"
-    path: /alertmanager/
-    pathType: ImplementationSpecific
+  # ingress:
+  #   enabled: true
+  #   annotations:
+  #     kubernetes.io/ingress.allow-http: "true"
+  #     kubernetes.io/ingress.class: nginx
+  #   hosts:
+  #     - "hello-world.local"
+  #   path: /alertmanager/
+  #   pathType: ImplementationSpecific
 
   # Configure email alerts
   config:
@@ -106,10 +109,13 @@ alertmanager:
         severity: 'critical'
       routes:
       - match:
-          alertname: PodMemoryUtilization
+          alertname: PodCPUUtilization
         receiver: 'email'
       - match:
-          alertname: PodCPUUtilization
+          alertname: PodCrashLoopBackOff
+        receiver: 'email'
+      - match:
+          alertname: PodInstanceDown
         receiver: 'email'
 
 additionalPrometheusRulesMap:
