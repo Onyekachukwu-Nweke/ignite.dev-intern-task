@@ -23,3 +23,12 @@
 This section of the README shows a step-by-step process on how to setup KinD locally using a bash script, dockerize a backend NodeJS application, and also use terraform to deploy the to the cluster and setup monitoring and observability using **kube-prometheus-stack**
 
 ### Table of Contents
+- Prerequisite
+- Assumptions
+- KinD Setup
+- Terraform Setup
+- Terraform Configurations
+- Deploying Infrastructure
+- Cleanup
+- License
+
