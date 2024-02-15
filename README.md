@@ -23,12 +23,28 @@
 This section of the README shows a step-by-step process on how to setup KinD locally using a bash script, dockerize a backend NodeJS application, and also use terraform to deploy the to the cluster and setup monitoring and observability using **kube-prometheus-stack**
 
 ### Table of Contents
-- [Prerequisite]
-- [Assumptions]
-- [KinD Setup]
+- [Prerequisite](#prequisite)
+- [Assumptions](#assumptions)
+- [KinD Setup]()
 - [Terraform Setup]
 - [Terraform Configurations]
 - [Deploying Infrastructure]
 - [Cleanup]
 - [License]
+
+### Prerequisites
+Before I began the Project, I had the following:
+
+- A knowledge of Terraform and the modules used in the project
+- Working knowledge of KinD (Kubernetes in Docker)
+- 
+
+### Assumptions
+Based on the provided requirements, here are some technical assumptions that I made for the project:
+
+1. Terraform is installed on the host system.
+2. Host system is a local machine running linux VM (Ubuntu precisely).
+3. Kubectl is already installed on the system
+4. Docker may not be installed
+5. There may be more than one cluster being managed
 
