@@ -33,19 +33,51 @@ This section of the README shows a step-by-step process on how to setup KinD loc
 - [License]
 
 ### Prerequisites
-Before I began the Project, I had the following:
-
-- A knowledge of Terraform and the modules used in the project
-- Working knowledge of KinD (Kubernetes in Docker)
+- Ensure you have Docker installed on your local machine.
+- Have Kind (Kubernetes in Docker) installed. Refer to the [Kind documentation](https://kind.sigs.k8s.io/docs/user/quick-start/) for installation instructions.
+- Install Terraform on your machine. Instructions can be found [here](https://learn.hashicorp.com/tutorials/terraform/install-cli).
 
 ### Assumptions
 Based on the provided requirements, here are some technical assumptions that I made for the project:
 
-1. Terraform is installed on the host system.
-2. Host system is a local machine running linux VM (Ubuntu precisely).
-3. Kubectl is already installed on the system
-4. Docker may not be installed
-5. There may be more than one cluster being managed
+- You have basic knowledge of Docker, Kubernetes, and Terraform.
+- Your local machine meets the minimum requirements for running Docker and Kind.
+- Host system is a local machine running linux VM (Ubuntu precisely).
+- You have a Dockerhub account for pushing Docker images.
 
-### KinD Setup
-Within the project repo I created a folder called ``scripts`` and then a file named ``setup_kind_cluster.sh`` which is the setup script in 
+---
+
+### KinD Setup:
+1. Execute the provided `setup_cluster.sh` bash script to create a Kind cluster with desired configurations.
+
+---
+
+### Terraform Setup:
+1. Clone the repository containing Terraform configurations for deploying infrastructure.
+
+---
+
+### Terraform Configurations:
+1. Modify the Terraform configuration files (`main.tf`, `variables.tf`, etc.) to define the infrastructure resources you want to deploy.
+2. Ensure you have provided necessary input variables such as cluster name, Docker image details, etc.
+
+---
+
+### Deploying Infrastructure:
+1. Apply the Terraform configuration using `terraform apply` command to deploy the infrastructure resources to the Kind cluster.
+
+---
+
+### Making changes to /etc/hosts:
+1. Add an entry to your `/etc/hosts` file to map the hostname to the IP address of the Kind cluster.
+
+---
+
+### Cleanup:
+1. After completing the testing or when you no longer need the resources, execute `terraform destroy` to delete the deployed infrastructure.
+2. Delete the Kind cluster using the `kind delete cluster` command.
+
+---
+
+### License:
+This project is licensed under the [MIT License](link_to_license).
