@@ -8,9 +8,16 @@ DOCKER_TAG=1.0
 DOCKER_USERNAME ?= $(shell bash -c 'read -p "Enter Docker username: " u; echo $$u')
 DOCKER_PASSWORD ?= $(shell bash -c 'read -s -p "Enter Docker password: " p; echo $$p')
 
+# Prompt for terraform env variables
+DOMAIN_NAME ?= $(shell bash -c 'read -p "Enter desired domain name of application: " n; echo $$n')
+EMAIL_FROM ?= $(shell bash -c 'read -p "Enter senders"')
+EMAIL_TO ?=
+EMAIL_USER
+EMAIL_PASS
+
 #install kind
 install-kind:
-	@echo "Setting-up kind..."
+	@echo "Setting-up kind cluster..."
 	./setup-kind.sh 
 
 #build docker image
@@ -36,7 +43,9 @@ plan:
 
 #run terraform apply
 apply: init plan
-	cd ./terraform && terraform apply -auto-approve
+	cd ./terraform && terraform apply -auto-approve /
+	 -var='email_auth{"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}"}'
+	 -var='domain="$(DOMAIN_NAME)"'
 
 #destroy terraform
 destroy:
