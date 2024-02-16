@@ -60,9 +60,12 @@ Based on the provided requirements, here are some technical assumptions that I m
 ### Terraform Setup:
 1. Create a terraform folder and initialized it using the command below
 
-```
+```hcl
 terraform init
 ```
+- Initializes Terraform in the current directory, downloading necessary plugins and modules.
+
+
 
 2. Create `main.tf` File:
   - Inside the `terraform` directory, create a file named `main.tf`.
@@ -140,17 +143,49 @@ resource "helm_release" "kube_prometheus_stack" {
   values            = [ file("${path.module}/templates/values/values.yaml") ]
 }
 ```
-- Creates Kubernetes resources from YAML manifests found in the specified directory.
+- Creates Kubernetes resources from YAML manifests for the `hello-world` app found in the specified directory.
 - Deploys a Helm chart named "kube-prometheus-stack" from the specified repository into the "monitoring" namespace, using values defined in a separate file.
 
 ---
 
 ### Validate Infrastructure & Plan
+Here's a README outline for validating infrastructure and creating an execution plan in Terraform:
+
+---
+
+### Validate Infrastructure & Plan
+Before making any changes to your infrastructure, it's essential to validate your Terraform configurations and review the planned changes. This ensures that your infrastructure changes align with your expectations and do not cause unintended consequences.
+
+#### Validation Steps
+
+##### 1. Validate Terraform Configuration
+```bash
+terraform validate
+```
+- Validates the syntax and configuration of your Terraform files without executing any actions.
+
+##### 2. Generate Terraform Plan
+```bash
+terraform plan
+```
+- Generates an execution plan based on the current state of your infrastructure and the proposed changes specified in your Terraform configuration files.
+- The plan highlights additions, modifications, or deletions of resources.
+
+### Review Plan Output
+- Carefully review the output of the `terraform plan` command to ensure it matches your expectations.
+- Verify that the planned changes align with your infrastructure requirements and objectives.
+- Pay attention to any potential disruptions or unintended changes.
 
 ---
 
 ### Deploying Infrastructure:
-1. Apply the Terraform configuration using `terraform apply` command to deploy the infrastructure resources to the Kind cluster.
+- Apply the Terraform configuration using `terraform apply` command to deploy the infrastructure resources to the Kind cluster.
+- If the plan output looks correct and aligns with your intentions, you can proceed to apply the changes.
+```bash
+terraform apply
+```
+- Applies the changes described in the execution plan to your infrastructure.
+- Terraform will prompt for confirmation before applying any changes.
 
 ---
 
