@@ -83,11 +83,11 @@ alertmanager:
     receivers:
     - name: 'email'
       email_configs:
-      - to: 'onyekachukwu@example.com'
-        from: 'alertmanager@example.com'
-        smarthost: 'sandbox.smtp.mailtrap.io:2525'
-        auth_username: 'd06592af1f74b7'
-        auth_password: '24a46ab73bc13a'
+      - to: '${email_to}'
+        from: '${email_from}'
+        smarthost: '${email_host}'
+        auth_username: '${email_user}'
+        auth_password: '${email_pass}'
 
 additionalPrometheusRulesMap:
   - name: pod-cpu-utilization

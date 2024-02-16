@@ -13,5 +13,5 @@ resource "helm_release" "kube_prometheus_stack" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   namespace  = "monitoring"
-  values = [ file("${path.module}/templates/values.yaml") ]
+  values = [ templatefile("${path.module}/templates/values.yaml"), {domain = "${var.domain}", email_to="${var.email_auth.email_to}", email_from="${var.email_auth.email_from}", email_host="${var.email_auth.email_host}", email_user="${var.email_auth.email_user}", email_password="${var.email_auth.email_password}"} ]
 }
