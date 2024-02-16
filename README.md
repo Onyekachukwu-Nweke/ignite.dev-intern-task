@@ -184,8 +184,32 @@ terraform apply
 
 ---
 
-### Making changes to /etc/hosts:
-1. Add an entry to your `/etc/hosts` file to map the hostname to the IP address of the Kind cluster.
+### Making changes to `/etc/hosts`:
+Added entries to my `/etc/hosts` file to map the hostname and subdomains to the IP address of the Kind cluster.
+
+![Hosts config](/img/hosts.png)
+
+---
+
+### Evidence of Deployed of Resources to Cluster and Alerts by Alert-Manager
+1. Hello-World
+![Hello](/img/hello.png)
+
+2. Grafana Webpage
+![Grafana](/img/grafana.png)
+
+3. Prometheus Webpage
+![Prometheus](/img/prometheus.png)
+
+4. Alert Manager in Prometheus
+![Alert-Manager](/img/alert-manager.png)
+
+5. Email Alert Firing Critical
+I configured email alerts with alert-manager using Mailtrap.io for sending test emails from the infrastructure
+
+![alert-1](/img/email-alert-1.png)
+
+![alert-2](/img/email-alert-2.png)
 
 ---
 
