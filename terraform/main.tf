@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "docs" {
-    pattern = "./templates/*.yaml"
+    pattern = "./kubernetes/*.yaml"
 }
 
 resource "kubectl_manifest" "test" {
@@ -13,5 +13,5 @@ resource "helm_release" "kube_prometheus_stack" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   namespace  = "monitoring"
-  values = [ file("${path.module}/templates/values/values.yaml") ]
+  values = [ file("${path.module}/templates/values.yaml") ]
 }
