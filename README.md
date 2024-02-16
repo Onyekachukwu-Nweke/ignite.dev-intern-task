@@ -50,7 +50,7 @@ Based on the provided requirements, here are some technical assumptions that I m
 ### KinD Setup:
 1. Clone the task repository
 2. Create a scripts folder
-3. Execute the provided `setup_cluster.sh` bash script inside the scripts folder to create a Kind cluster with desired configurations such as checking if docker and kubectl is installed.
+3. Execute the provided `setup_cluster.sh` bash script inside the scripts folder to create a Kind cluster with desired configurations such as checking if docker and kubectl is installed and the `kubeconfig` file stored elsewhere.
 
 ![Picture of Kind Cluster](/img/kind-dep.png)
 ![Picture of resources deployed](/img/kind-res.png)
@@ -75,6 +75,73 @@ terraform init
 ---
 
 ### Terraform Configurations:
+This Terraform configuration manages Kubernetes resources and Helm releases using the `kubectl` and `helm` providers. It leverages Terraform version 0.13 or higher.
+
+### Dependencies
+- **Terraform Version:** 0.13 or higher
+- **Terraform Providers:** 
+  - `kubectl` provider from "gavinbunney/kubectl" source, version 1.7.0 or higher
+  - `helm` provider for Helm chart management
+  
+### Configuration Details
+
+#### Terraform Block
+```hcl
+terraform {
+  required_version = ">= 0.13"
+
+  required_providers {
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
+  }
+}
+```
+- Sets the required Terraform version and specifies the required providers.
+
+#### Providers
+```hcl
+provider "kubectl" {
+  load_config_file = true
+  config_path      = "~/.kube/config_kind"
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config_kind"
+  }
+}
+```
+- Configures the `kubectl` provider to load the Kubernetes configuration file from `~/.kube/config_kind`.
+- Configures the `helm` provider to interact with Kubernetes using the same configuration file.
+
+#### Data Source
+```hcl
+data "kubectl_path_documents" "docs" {
+    pattern = "./templates/*.yaml"
+}
+```
+- Collects YAML documents from the specified directory pattern for further processing.
+
+#### Resources
+```hcl
+resource "kubectl_manifest" "test" {
+    for_each  = toset(data.kubectl_path_documents.docs.documents)
+    yaml_body = each.value
+}
+
+resource "helm_release" "kube_prometheus_stack" {
+  name              = "kube-prometheus-stack"
+  create_namespace = true
+  repository        = "https://prometheus-community.github.io/helm-charts"
+  chart             = "kube-prometheus-stack"
+  namespace         = "monitoring"
+  values            = [ file("${path.module}/templates/values/values.yaml") ]
+}
+```
+- Creates Kubernetes resources from YAML manifests found in the specified directory.
+- Deploys a Helm chart named "kube-prometheus-stack" from the specified repository into the "monitoring" namespace, using values defined in a separate file.
 
 ---
 
