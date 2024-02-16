@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "${domain}"
+    - host: hello-world.local
       http:
         paths:
           - path: /(.*)

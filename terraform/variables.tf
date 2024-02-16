@@ -7,8 +7,21 @@ variable "cluster_config_path" {
 variable "domain" {
   type = string
   description = "domain of the application"
-  default = ""
+  default = "hello-world.local"
 }
+
+variable "grafana_domain" {
+  type = string
+  description = "domain of the application"
+  default = "grafana.hello-world.local"
+}
+
+variable "prometheus_domain" {
+  type = string
+  description = "domain of the prometheus monitoring"
+  default = "prometheus.hello-world.local"
+}
+
 
 #  to: 'onyekachukwu@example.com'
 #  from: 'alertmanager@example.com'
@@ -27,10 +40,10 @@ variable "email_auth" {
   })
   description = "Email authentication credentials for alert-manager"
   default = {
-    email_to   = ""
-    email_from = ""
-    email_host = ""
-    email_user = ""
-    email_pass = ""
+    email_to   = "null"
+    email_from = "null"
+    email_host = "null"
+    email_user = "null"
+    email_pass = "null"
   }
 }

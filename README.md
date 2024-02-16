@@ -12,8 +12,6 @@
   - [Assumptions](#assumptions)
   - [Deploying Infrastructure and its resources](#deploying-infrastructure-and-its-resources)
   - [Making changes to `/etc/hosts`:](#making-changes-to-etchosts)
-  - [Evidence of Deployed of Resources to Cluster and Alerts by Alert-Manager](#evidence-of-deployed-of-resources-to-cluster-and-alerts-by-alert-manager)
-  - [Cleanup:](#cleanup)
   - [License:](#license)
 
 ### Setup a kubernetes cluster using kind 
@@ -55,12 +53,18 @@ Based on the provided requirements, here are some technical assumptions that I m
 ---
 
 ### Deploying Infrastructure and its resources
-
+To start the application, run
+```bash
+make all
+```
+You will be prompted for your docker username and password ( a personal access token ) in order to push your docker image to dockerhub and also email credentials if you want to setup alert-manager alerts for your infrastructure but it can be skipped by leaving it blank.
 
 ---
 
 ### Making changes to `/etc/hosts`:
 Added entries to my `/etc/hosts` file to map the hostname and subdomains to the IP address of the Kind cluster.
+
+```bash
 
 ![Hosts config](/img/hosts.png)
 
@@ -89,8 +93,11 @@ I configured email alerts with alert-manager using Mailtrap.io for sending test 
 ---
 
 ### Cleanup:
-1. After completing the testing or when you no longer need the resources, execute `terraform destroy` to delete the deployed infrastructure.
-2. Delete the Kind cluster using the `kind delete cluster` command.
+To clean up infrastructure
+
+```bash
+make destroy
+```
 
 ---
 

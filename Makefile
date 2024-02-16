@@ -10,9 +10,6 @@ DOCKER_PASSWORD ?= $(shell bash -c 'read -s -p "Enter Docker password: " p; echo
 
 # Prompt for Terraform environment variables
 
-# Prompt for the desired domain name of the application.
-DOMAIN_NAME ?= $(shell bash -c 'read -p "Enter desired domain name of application: " n; echo $$n')
-
 # Prompt for the sender's email address. This will be used as the "from" address for alerts.
 EMAIL_FROM ?= $(shell bash -c 'read -p "Enter senders email address: " m; echo $$m')
 
@@ -53,15 +50,16 @@ init:
 
 #run terraform plan
 plan:
-	terraform -chdir=terraform/ plan -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}' -var='domain="$(DOMAIN_NAME)"'
+	terraform -chdir=terraform/ plan -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}'
 
 #run terraform apply
 apply: init plan
-	terraform -chdir=terraform/ apply -auto-approve -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}' -var='domain="$(DOMAIN_NAME)"'
+	terraform -chdir=terraform/ apply -auto-approve -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}'
 
 #destroy terraform
 destroy:
-	terraform -chdir=terraform/ destroy
+	terraform -chdir=terraform/ destroy -auto-approve
+	kind delete cluster --name ignite-dev
 
 all: install-kind docker-build docker-login docker-push init plan apply 
 
