@@ -149,11 +149,6 @@ resource "helm_release" "kube_prometheus_stack" {
 ---
 
 ### Validate Infrastructure & Plan
-Here's a README outline for validating infrastructure and creating an execution plan in Terraform:
-
----
-
-### Validate Infrastructure & Plan
 Before making any changes to your infrastructure, it's essential to validate your Terraform configurations and review the planned changes. This ensures that your infrastructure changes align with your expectations and do not cause unintended consequences.
 
 #### Validation Steps
