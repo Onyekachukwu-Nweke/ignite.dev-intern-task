@@ -40,24 +40,28 @@ else
     echo "kubectl is already installed."
 fi
 
-# Install kind depending on the system architecture
-if [ $ARCH = "x86_64" ]; then
-    KIND_URL="https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64"
-elif [ $ARCH = "aarch64" ]; then
-    KIND_URL="https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-arm64"
+if ! command -v kind &> /dev/null; then
+    # Install kind depending on the system architecture
+    if [ $ARCH = "x86_64" ]; then
+        KIND_URL="https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64"
+    elif [ $ARCH = "aarch64" ]; then
+        KIND_URL="https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-arm64"
+    else
+        echo "Unsupported architecture: $ARCH"
+        exit 1
+    fi
+
+    echo "Downloading kind binary for $ARCH..."
+    curl -Lo ./kind $KIND_URL
+    chmod +x ./kind
+
+    # Move kind binary to /usr/local/bin
+    sudo mv ./kind /usr/local/bin/kind
+
+    echo "kind has been installed."
 else
-    echo "Unsupported architecture: $ARCH"
-    exit 1
+    echo "kind is already installed"
 fi
-
-echo "Downloading kind binary for $ARCH..."
-curl -Lo ./kind $KIND_URL
-chmod +x ./kind
-
-# Move kind binary to /usr/local/bin
-sudo mv ./kind /usr/local/bin/kind
-
-echo "kind has been installed."
 
 # Create a Kind cluster named "ignite-dev and enable ingress"
 cat <<EOF | kind create cluster --name ignite-dev --config=-

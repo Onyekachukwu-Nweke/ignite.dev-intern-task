@@ -14,16 +14,19 @@ DOCKER_PASSWORD ?= $(shell bash -c 'read -s -p "Enter Docker password: " p; echo
 DOMAIN_NAME ?= $(shell bash -c 'read -p "Enter desired domain name of application: " n; echo $$n')
 
 # Prompt for the sender's email address. This will be used as the "from" address for alerts.
-EMAIL_FROM ?= $(shell bash -c 'read -p "Enter sender\'s email address: " f; echo $$f')
+EMAIL_FROM ?= $(shell bash -c 'read -p "Enter senders email address: " m; echo $$m')
 
 # Prompt for the recipient's email address. Alerts will be sent to this address.
-EMAIL_TO ?= $(shell bash -c 'read -p "Enter recipient\'s email address: " t; echo $$t')
+EMAIL_TO ?= $(shell bash -c 'read -p "Enter recipients email address: " o; echo $$o')
 
 # Prompt for the email user. This will typically be the username used for SMTP authentication.
 EMAIL_USER ?= $(shell bash -c 'read -p "Enter email user: " l; echo $$l')
 
+# Prompt for the email user. This will typically be the username used for SMTP authentication.
+EMAIL_HOST ?= $(shell bash -c 'read -p "Enter email host (ex. host:port): " r; echo $$r')
+
 # Prompt for the email password. This will be used for SMTP authentication.
-EMAIL_PASS ?= $(shell bash -c 'read -p "Enter email password: " k; echo $$k')
+EMAIL_PASS ?= $(shell bash -c 'read -s -p "Enter email password: " k; echo $$k')
 
 
 #install kind
@@ -46,23 +49,19 @@ docker-push: docker-login
 
 #initialize terraform
 init:
-	cd ./terraform && terraform init
+	terraform -chdir=terraform/ init
 
 #run terraform plan
 plan:
-	cd ./terraform && terraform plan /
-	-var='email_auth{"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}"}'
-	-var='domain="$(DOMAIN_NAME)"'
+	terraform -chdir=terraform/ plan -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}' -var='domain="$(DOMAIN_NAME)"'
 
 #run terraform apply
 apply: init plan
-	cd ./terraform && terraform apply -auto-approve /
-	 -var='email_auth{"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}"}'
-	 -var='domain="$(DOMAIN_NAME)"'
+	terraform -chdir=terraform/ apply -auto-approve -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}' -var='domain="$(DOMAIN_NAME)"'
 
 #destroy terraform
 destroy:
-	cd ./terraform && terraform destroy
+	terraform -chdir=terraform/ destroy
 
 all: install-kind docker-build docker-login docker-push init plan apply 
 
