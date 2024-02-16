@@ -52,7 +52,8 @@ Based on the provided requirements, here are some technical assumptions that I m
 2. Create a scripts folder
 3. Execute the provided `setup_cluster.sh` bash script inside the scripts folder to create a Kind cluster with desired configurations such as checking if docker and kubectl is installed.
 
-![Picture of Kind Cluster]()
+![Picture of Kind Cluster](/img/kind-dep.png)
+![Picture of resources deployed](/img/kind-res.png)
 
 ---
 
