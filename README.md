@@ -23,14 +23,35 @@
 This section of the README shows a step-by-step process on how to setup KinD locally using a bash script, dockerize a backend NodeJS application, and also use terraform to deploy the to the cluster and setup monitoring and observability using **kube-prometheus-stack**
 
 ### Table of Contents
-- [Prerequisite](#prequisite)
-- [Assumptions](#assumptions)
-- [KinD Setup](#kind-setup)
-- [Terraform Setup](#terraform-setup)
-- [Terraform Configurations](#terraform-configurations)
-- [Deploying Infrastructure]()
-- [Cleanup]()
-- [License]()
+- [Task instructions for DevOps Intern Role](#task-instructions-for-devops-intern-role)
+  - [Setup a kubernetes cluster using kind](#setup-a-kubernetes-cluster-using-kind)
+  - [Deploy a sample Node.js app using terraform](#deploy-a-sample-nodejs-app-using-terraform)
+  - [Bonus](#bonus)
+  - [Submission](#submission)
+- [Task Submission By Nweke Onyekachukwu Ejiofor](#task-submission-by-nweke-onyekachukwu-ejiofor)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Assumptions](#assumptions)
+  - [KinD Setup:](#kind-setup)
+  - [Dockerization of Hello-World App](#dockerization-of-hello-world-app)
+  - [Terraform Setup:](#terraform-setup)
+  - [Terraform Configurations:](#terraform-configurations)
+  - [Dependencies](#dependencies)
+  - [Configuration Details](#configuration-details)
+    - [Terraform Block](#terraform-block)
+    - [Providers](#providers)
+    - [Data Source](#data-source)
+    - [Resources](#resources)
+  - [Validate Infrastructure \& Plan](#validate-infrastructure--plan)
+    - [Validation Steps](#validation-steps)
+      - [1. Validate Terraform Configuration](#1-validate-terraform-configuration)
+      - [2. Generate Terraform Plan](#2-generate-terraform-plan)
+  - [Review Plan Output](#review-plan-output)
+  - [Deploying Infrastructure:](#deploying-infrastructure)
+  - [Making changes to `/etc/hosts`:](#making-changes-to-etchosts)
+  - [Evidence of Deployed of Resources to Cluster and Alerts by Alert-Manager](#evidence-of-deployed-of-resources-to-cluster-and-alerts-by-alert-manager)
+  - [Cleanup:](#cleanup)
+  - [License:](#license)
 
 ### Prerequisites
 - Ensure you have Docker installed on your local machine.
@@ -54,6 +75,66 @@ Based on the provided requirements, here are some technical assumptions that I m
 
 ![Picture of Kind Cluster](/img/kind-dep.png)
 ![Picture of resources deployed](/img/kind-res.png)
+
+---
+
+### Dockerization of Hello-World App
+Inside the backend folder that houses the application, there is a `Dockerfile`
+Let's break down the Dockerfile and then proceed with building and pushing the Docker image:
+
+1. **Use a lightweight Node.js image as base**:
+   ```Dockerfile
+   FROM node:18-alpine
+   ```
+   - This line instructs Docker to use the official Node.js image with version 18 based on Alpine Linux as the base image. Alpine Linux is known for its lightweight nature, making it suitable for Docker containers.
+
+2. **Set the working directory inside the container**:
+   ```Dockerfile
+   WORKDIR /app
+   ```
+   - This line sets the working directory inside the container to `/app`. All subsequent commands will be executed from this directory.
+
+3. **Copy package.json and package-lock.json to WORKDIR**:
+   ```Dockerfile
+   COPY package*.json ./
+   ```
+   - This line copies `package.json` and `package-lock.json` from the host machine to the `/app` directory inside the container.
+
+4. **Install dependencies**:
+   ```Dockerfile
+   RUN npm install --production
+   ```
+   - This line installs the Node.js dependencies defined in `package.json` using npm. The `--production` flag ensures that only production dependencies are installed, omitting any development dependencies.
+
+5. **Copy application code to WORKDIR**:
+   ```Dockerfile
+   COPY . .
+   ```
+   - This line copies the rest of the application code from the host machine to the `/app` directory inside the container.
+
+6. **Expose port 3000**:
+   ```Dockerfile
+   EXPOSE 3000
+   ```
+   - This line exposes port 3000 on the container, allowing external access to the application running on that port.
+
+7. **Command to run the application**:
+   ```Dockerfile
+   CMD ["npm", "start"]
+   ```
+   - This line specifies the command to run the application when the container starts. In this case, it runs `npm start`, assuming that your `package.json` has a script named `"start"`.
+
+Now, let's proceed with building and pushing the Docker image:
+
+```bash
+# Build the Docker image
+docker build -t yourusername/hello-world-app .
+
+# Push the Docker image to a container registry (replace "yourusername" and "v1" with your desired values)
+docker push onyekachukwu/hello-world-app
+```
+
+
 
 ---
 
