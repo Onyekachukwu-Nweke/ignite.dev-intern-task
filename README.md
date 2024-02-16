@@ -134,7 +134,7 @@ docker build -t yourusername/hello-world-app .
 docker push onyekachukwu/hello-world-app
 ```
 
-
+![docker](/img/docker.png)
 
 ---
 
