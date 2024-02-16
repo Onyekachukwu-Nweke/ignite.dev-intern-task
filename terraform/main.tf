@@ -38,31 +38,3 @@ resource "helm_release" "kube_prometheus_stack" {
   namespace  = "monitoring"
   values = [ file("${path.module}/templates/values/values.yaml") ]
 }
-
-# resource "kubectl_manifest" "grafana-ingress" {
-#   yaml_body = <<YAML
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: grafana-ingress
-#   annotations:
-#     # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-#     # nginx.ingress.kubernetes.io/ssl-redirect: "true" # Redirect HTTP to HTTPS
-#     kubernetes.io/ingress.className: "nginx"
-#   namespace: monitoring
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - host: grafana.hello-world.local
-#       http:
-#         paths:
-#           - path: /
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: kube-prometheus-stack-grafana
-#                 port:
-#                   number: 80
-
-# YAML
-# }

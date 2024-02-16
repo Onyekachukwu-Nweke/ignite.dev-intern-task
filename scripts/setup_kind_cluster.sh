@@ -22,6 +22,24 @@ else
     echo "Docker is already installed."
 fi
 
+# Check if kubectl is installed
+if ! command -v kubectl &> /dev/null; then
+    echo "kubectl is not installed. Installing..."
+    
+    # Download the latest version of kubectl
+    curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+    
+    # Make kubectl executable
+    chmod +x ./kubectl
+    
+    # Move kubectl to a directory in your PATH (you may need sudo for this)
+    sudo mv ./kubectl /usr/local/bin/kubectl
+    
+    echo "kubectl installed successfully."
+else
+    echo "kubectl is already installed."
+fi
+
 # Install kind depending on the system architecture
 if [ $ARCH = "x86_64" ]; then
     KIND_URL="https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64"

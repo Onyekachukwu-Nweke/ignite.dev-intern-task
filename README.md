@@ -25,12 +25,12 @@ This section of the README shows a step-by-step process on how to setup KinD loc
 ### Table of Contents
 - [Prerequisite](#prequisite)
 - [Assumptions](#assumptions)
-- [KinD Setup]()
-- [Terraform Setup]()
-- [Terraform Configurations]()
+- [KinD Setup](#kind-setup)
+- [Terraform Setup](#terraform-setup)
+- [Terraform Configurations](#terraform-configurations)
 - [Deploying Infrastructure]()
-- [Cleanup]
-- [License]
+- [Cleanup]()
+- [License]()
 
 ### Prerequisites
 - Ensure you have Docker installed on your local machine.
@@ -48,18 +48,36 @@ Based on the provided requirements, here are some technical assumptions that I m
 ---
 
 ### KinD Setup:
-1. Execute the provided `setup_cluster.sh` bash script to create a Kind cluster with desired configurations.
+1. Clone the task repository
+2. Create a scripts folder
+3. Execute the provided `setup_cluster.sh` bash script inside the scripts folder to create a Kind cluster with desired configurations such as checking if docker and kubectl is installed.
+
+![Picture of Kind Cluster]()
 
 ---
 
 ### Terraform Setup:
-1. Clone the repository containing Terraform configurations for deploying infrastructure.
+1. Create a terraform folder and initialized it using the command below
+
+```
+terraform init
+```
+
+2. Create `main.tf` File:
+  - Inside the `terraform` directory, create a file named `main.tf`.
+  - This file contains the main Terraform code responsible for deploying resources to the cluster.
+  
+3. Create Templates Folder:
+  - Inside the terraform directory, create a folder named templates.
+  - This folder contains additional templates or configuration files needed for the Terraform deployment.
 
 ---
 
 ### Terraform Configurations:
-1. Modify the Terraform configuration files (`main.tf`, `variables.tf`, etc.) to define the infrastructure resources you want to deploy.
-2. Ensure you have provided necessary input variables such as cluster name, Docker image details, etc.
+
+---
+
+### Validate Infrastructure & Plan
 
 ---
 
