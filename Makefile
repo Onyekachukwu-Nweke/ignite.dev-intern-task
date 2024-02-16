@@ -10,20 +10,20 @@ DOCKER_PASSWORD ?= $(shell bash -c 'read -s -p "Enter Docker password: " p; echo
 
 # Prompt for Terraform environment variables
 
-# Prompt for the sender's email address. This will be used as the "from" address for alerts.
-EMAIL_FROM ?= $(shell bash -c 'read -p "Enter senders email address: " m; echo $$m')
+# # Prompt for the sender's email address. This will be used as the "from" address for alerts.
+# EMAIL_FROM ?= $(shell bash -c 'read -p "Enter senders email address: " m; echo $$m')
 
-# Prompt for the recipient's email address. Alerts will be sent to this address.
-EMAIL_TO ?= $(shell bash -c 'read -p "Enter recipients email address: " o; echo $$o')
+# # Prompt for the recipient's email address. Alerts will be sent to this address.
+# EMAIL_TO ?= $(shell bash -c 'read -p "Enter recipients email address: " o; echo $$o')
 
-# Prompt for the email user. This will typically be the username used for SMTP authentication.
-EMAIL_USER ?= $(shell bash -c 'read -p "Enter email user: " l; echo $$l')
+# # Prompt for the email user. This will typically be the username used for SMTP authentication.
+# EMAIL_USER ?= $(shell bash -c 'read -p "Enter email user: " l; echo $$l')
 
-# Prompt for the email user. This will typically be the username used for SMTP authentication.
-EMAIL_HOST ?= $(shell bash -c 'read -p "Enter email host (ex. host:port): " r; echo $$r')
+# # Prompt for the email user. This will typically be the username used for SMTP authentication.
+# EMAIL_HOST ?= $(shell bash -c 'read -p "Enter email host (ex. host:port): " r; echo $$r')
 
-# Prompt for the email password. This will be used for SMTP authentication.
-EMAIL_PASS ?= $(shell bash -c 'read -s -p "Enter email password: " k; echo $$k')
+# # Prompt for the email password. This will be used for SMTP authentication.
+# EMAIL_PASS ?= $(shell bash -c 'read -s -p "Enter email password: " k; echo $$k')
 
 
 #install kind
@@ -50,11 +50,11 @@ init:
 
 #run terraform plan
 plan:
-	terraform -chdir=terraform/ plan -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}'
+	terraform -chdir=terraform/ plan
 
 #run terraform apply
 apply: init plan
-	terraform -chdir=terraform/ apply -auto-approve -var='email_auth={"email_to":"$(EMAIL_TO)", "email_from":"$(EMAIL_FROM)", "email_user":"$(EMAIL_USER)", "email_pass":"${EMAIL_PASS}", "email_host":"$(EMAIL_HOST)"}'
+	terraform -chdir=terraform/ apply -auto-approve
 
 #destroy terraform
 destroy:

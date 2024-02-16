@@ -13,5 +13,5 @@ resource "helm_release" "kube_prometheus_stack" {
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
   namespace        = "monitoring"
-  values           = [templatefile("${path.module}/templates/values.yaml", { prom = var.prometheus_domain, grafana = var.grafana_domain, email_to = var.email_auth.email_to, email_from = var.email_auth.email_from, email_host = var.email_auth.email_host, email_user = var.email_auth.email_user, email_pass = var.email_auth.email_pass })]
+  values           = [templatefile("${path.module}/templates/values.yaml", {prom = var.prometheus_domain, grafana = var.grafana_domain})]
 }

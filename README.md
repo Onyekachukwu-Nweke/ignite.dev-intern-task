@@ -12,6 +12,8 @@
   - [Assumptions](#assumptions)
   - [Deploying Infrastructure and its resources](#deploying-infrastructure-and-its-resources)
   - [Making changes to `/etc/hosts`:](#making-changes-to-etchosts)
+  - [Evidence of Deployed of Resources to Cluster and Alerts by Alert-Manager](#evidence-of-deployed-of-resources-to-cluster-and-alerts-by-alert-manager)
+  - [Cleanup:](#cleanup)
   - [License:](#license)
 
 ### Setup a kubernetes cluster using kind 
@@ -65,7 +67,8 @@ You will be prompted for your docker username and password ( a personal access t
 Added entries to my `/etc/hosts` file to map the hostname and subdomains to the IP address of the Kind cluster.
 
 ```bash
-
+sudo nano /etc/hosts
+```
 ![Hosts config](/img/hosts.png)
 
 ---
